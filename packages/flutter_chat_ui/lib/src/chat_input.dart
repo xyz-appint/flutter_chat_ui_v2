@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
@@ -75,6 +77,27 @@ class _ChatInputState extends State<ChatInput> {
   final _key = GlobalKey();
   late final TextEditingController _textController;
 
+  late final _inputFocusNode = FocusNode(
+    onKeyEvent: (node, event) {
+      if (event.physicalKey == PhysicalKeyboardKey.enter &&
+          !HardwareKeyboard.instance.physicalKeysPressed.any(
+            (el) => <PhysicalKeyboardKey>{
+              PhysicalKeyboardKey.shiftLeft,
+              PhysicalKeyboardKey.shiftRight,
+            }.contains(el),
+          )) {
+        if (kIsWeb && _textController.value.isComposingRangeValid) {
+          return KeyEventResult.ignored;
+        }
+        if (event is KeyDownEvent) {
+          _handleSubmitted(_textController.text);
+        }
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    },
+  );
+
   @override
   void initState() {
     super.initState();
@@ -90,6 +113,7 @@ class _ChatInputState extends State<ChatInput> {
 
   @override
   void dispose() {
+    _inputFocusNode.dispose();
     // Only try to dispose text controller if it's not provided, let
     // user handle disposing it how they want.
     if (widget.textEditingController == null) {
@@ -141,6 +165,7 @@ class _ChatInputState extends State<ChatInput> {
                       SizedBox(width: widget.gap),
                       Expanded(
                         child: TextField(
+                          focusNode: _inputFocusNode,
                           controller: _textController,
                           expands: widget.expanded ?? false,
                           minLines: widget.expanded == true ? 1 : null,
@@ -163,7 +188,7 @@ class _ChatInputState extends State<ChatInput> {
                           style: theme.typography.bodyMedium.copyWith(
                             color: widget.textColor ?? theme.colors.onSurface,
                           ),
-                          textInputAction: TextInputAction.send,
+                          textInputAction: (Platform.isAndroid || Platform.isIOS) ? TextInputAction.send : TextInputAction.newline,
                           onSubmitted: _handleSubmitted,
                           keyboardType: TextInputType.multiline,
                         ),
