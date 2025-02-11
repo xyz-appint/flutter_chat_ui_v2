@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:provider/provider.dart';
 
@@ -162,8 +163,9 @@ class _ChatInputState extends State<ChatInput> {
                           style: theme.typography.bodyMedium.copyWith(
                             color: widget.textColor ?? theme.colors.onSurface,
                           ),
+                          textInputAction: TextInputAction.newline,
                           onSubmitted: _handleSubmitted,
-                          textInputAction: TextInputAction.send,
+                          keyboardType: TextInputType.multiline,
                         ),
                       ),
                       SizedBox(width: widget.gap),
