@@ -50,7 +50,7 @@ class ChatInput extends StatefulWidget {
     this.gap = 8,
     this.inputBorder = const OutlineInputBorder(
       borderSide: BorderSide.none,
-      borderRadius: BorderRadius.all(Radius.circular(24)),
+      borderRadius: BorderRadius.all(Radius.circular(16)),
     ),
     this.filled = true,
     this.topWidget,
