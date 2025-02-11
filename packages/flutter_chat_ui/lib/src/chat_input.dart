@@ -163,7 +163,7 @@ class _ChatInputState extends State<ChatInput> {
                           style: theme.typography.bodyMedium.copyWith(
                             color: widget.textColor ?? theme.colors.onSurface,
                           ),
-                          textInputAction: TextInputAction.newline,
+                          textInputAction: TextInputAction.send,
                           onSubmitted: _handleSubmitted,
                           keyboardType: TextInputType.multiline,
                         ),
