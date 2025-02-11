@@ -32,6 +32,8 @@ class ChatInput extends StatefulWidget {
   final Color? textColor;
   final Color? inputFillColor;
   final String? hintText;
+  final bool? expanded;
+  final int? maxLines;
 
   const ChatInput({
     super.key,
@@ -60,6 +62,8 @@ class ChatInput extends StatefulWidget {
     this.textColor,
     this.inputFillColor,
     this.hintText = 'Type a message',
+    this.expanded = false,
+    this.maxLines = 1,
   });
 
   @override
@@ -95,9 +99,7 @@ class _ChatInputState extends State<ChatInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomSafeArea = widget.handleSafeArea == true
-        ? MediaQuery.of(context).padding.bottom
-        : 0.0;
+    final bottomSafeArea = widget.handleSafeArea == true ? MediaQuery.of(context).padding.bottom : 0.0;
     final theme = context.watch<ChatTheme>();
     final onAttachmentTap = context.read<OnAttachmentTapCallback?>();
 
@@ -123,11 +125,7 @@ class _ChatInputState extends State<ChatInput> {
               children: [
                 if (widget.topWidget != null) widget.topWidget!,
                 Padding(
-                  padding: widget.handleSafeArea == true
-                      ? (widget.padding
-                              ?.add(EdgeInsets.only(bottom: bottomSafeArea)) ??
-                          EdgeInsets.only(bottom: bottomSafeArea))
-                      : (widget.padding ?? EdgeInsets.zero),
+                  padding: widget.handleSafeArea == true ? (widget.padding?.add(EdgeInsets.only(bottom: bottomSafeArea)) ?? EdgeInsets.only(bottom: bottomSafeArea)) : (widget.padding ?? EdgeInsets.zero),
                   child: Row(
                     children: [
                       widget.attachmentIcon != null
@@ -143,6 +141,8 @@ class _ChatInputState extends State<ChatInput> {
                       Expanded(
                         child: TextField(
                           controller: _textController,
+                          expands: widget.expanded ?? false,
+                          maxLines: widget.maxLines ?? 1,
                           decoration: InputDecoration(
                             hintText: widget.hintText,
                             hintStyle: theme.typography.bodyMedium.copyWith(
@@ -172,8 +172,7 @@ class _ChatInputState extends State<ChatInput> {
                               color: widget.sendIconColor ??
                                   // ignore: deprecated_member_use
                                   theme.colors.onSurface.withOpacity(0.5),
-                              onPressed: () =>
-                                  _handleSubmitted(_textController.text),
+                              onPressed: () => _handleSubmitted(_textController.text),
                             )
                           : const SizedBox.shrink(),
                     ],
