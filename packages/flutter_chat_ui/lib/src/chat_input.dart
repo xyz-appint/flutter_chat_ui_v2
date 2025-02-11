@@ -142,7 +142,7 @@ class _ChatInputState extends State<ChatInput> {
                         child: TextField(
                           controller: _textController,
                           expands: widget.expanded ?? false,
-                          maxLines: widget.maxLines ?? 1,
+                          maxLines: widget.expanded == true ? null : widget.maxLines ?? 1,
                           decoration: InputDecoration(
                             hintText: widget.hintText,
                             hintStyle: theme.typography.bodyMedium.copyWith(
