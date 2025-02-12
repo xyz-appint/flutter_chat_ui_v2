@@ -169,7 +169,7 @@ class _ChatInputState extends State<ChatInput> {
                           controller: _textController,
                           expands: widget.expanded ?? false,
                           minLines: widget.expanded == true ? 1 : null,
-                          maxLines: widget.expanded == true ? null : widget.maxLines ?? 1,
+                          maxLines: widget.expanded == true ? null : widget.maxLines,
                           decoration: InputDecoration(
                             hintText: widget.hintText,
                             hintStyle: theme.typography.bodyMedium.copyWith(
@@ -189,7 +189,7 @@ class _ChatInputState extends State<ChatInput> {
                             color: widget.textColor ?? theme.colors.onSurface,
                           ),
                           textInputAction: (Platform.isAndroid || Platform.isIOS) ? TextInputAction.send : TextInputAction.newline,
-                          onSubmitted: _handleSubmitted,
+                          onSubmitted: (_) => _handleSubmitted,
                           keyboardType: TextInputType.multiline,
                         ),
                       ),
