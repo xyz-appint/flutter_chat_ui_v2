@@ -128,85 +128,88 @@ class _ChatInputState extends State<ChatInput> {
     final theme = context.watch<ChatTheme>();
     final onAttachmentTap = context.read<OnAttachmentTapCallback?>();
 
-    return Positioned(
-      left: widget.left,
-      right: widget.right,
-      top: widget.top,
-      bottom: widget.bottom,
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            // TODO: remove backdrop filter if both are 0
-            sigmaX: widget.sigmaX ?? 0,
-            sigmaY: widget.sigmaY ?? 0,
-          ),
-          child: Container(
-            key: _key,
-            color: widget.backgroundColor == ChatInput._sentinelColor
-                // ignore: deprecated_member_use
-                ? theme.colors.surfaceContainerLow.withOpacity(0.8)
-                : widget.backgroundColor,
-            child: Column(
-              children: [
-                if (widget.topWidget != null) widget.topWidget!,
-                Padding(
-                  padding: widget.handleSafeArea == true ? (widget.padding?.add(EdgeInsets.only(bottom: bottomSafeArea)) ?? EdgeInsets.only(bottom: bottomSafeArea)) : (widget.padding ?? EdgeInsets.zero),
-                  child: Row(
-                    children: [
-                      widget.attachmentIcon != null
-                          ? IconButton(
-                              icon: widget.attachmentIcon!,
-                              color: widget.attachmentIconColor ??
-                                  // ignore: deprecated_member_use
-                                  theme.colors.onSurface.withOpacity(0.5),
-                              onPressed: onAttachmentTap,
-                            )
-                          : const SizedBox.shrink(),
-                      SizedBox(width: widget.gap),
-                      Expanded(
-                        child: TextField(
-                          focusNode: _inputFocusNode,
-                          controller: _textController,
-                          expands: widget.expanded ?? false,
-                          minLines: widget.expanded == true ? 1 : null,
-                          maxLines: widget.expanded == true ? null : widget.maxLines,
-                          decoration: InputDecoration(
-                            hintText: widget.hintText,
-                            hintStyle: theme.typography.bodyMedium.copyWith(
-                              color: widget.hintColor ??
-                                  // ignore: deprecated_member_use
-                                  theme.colors.onSurface.withOpacity(0.5),
-                            ),
-                            border: widget.inputBorder,
-                            filled: widget.filled,
-                            fillColor: widget.inputFillColor ??
-                                theme.colors.surfaceContainerHigh
+    return GestureDetector(
+       onTap: () => _inputFocusNode.requestFocus(),
+      child: Positioned(
+        left: widget.left,
+        right: widget.right,
+        top: widget.top,
+        bottom: widget.bottom,
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              // TODO: remove backdrop filter if both are 0
+              sigmaX: widget.sigmaX ?? 0,
+              sigmaY: widget.sigmaY ?? 0,
+            ),
+            child: Container(
+              key: _key,
+              color: widget.backgroundColor == ChatInput._sentinelColor
+                  // ignore: deprecated_member_use
+                  ? theme.colors.surfaceContainerLow.withOpacity(0.8)
+                  : widget.backgroundColor,
+              child: Column(
+                children: [
+                  if (widget.topWidget != null) widget.topWidget!,
+                  Padding(
+                    padding: widget.handleSafeArea == true ? (widget.padding?.add(EdgeInsets.only(bottom: bottomSafeArea)) ?? EdgeInsets.only(bottom: bottomSafeArea)) : (widget.padding ?? EdgeInsets.zero),
+                    child: Row(
+                      children: [
+                        widget.attachmentIcon != null
+                            ? IconButton(
+                                icon: widget.attachmentIcon!,
+                                color: widget.attachmentIconColor ??
                                     // ignore: deprecated_member_use
-                                    .withOpacity(0.8),
-                            hoverColor: Colors.transparent,
+                                    theme.colors.onSurface.withOpacity(0.5),
+                                onPressed: onAttachmentTap,
+                              )
+                            : const SizedBox.shrink(),
+                        SizedBox(width: widget.gap),
+                        Expanded(
+                          child: TextField(
+                            focusNode: _inputFocusNode,
+                            controller: _textController,
+                            expands: widget.expanded ?? false,
+                            minLines: widget.expanded == true ? 1 : null,
+                            maxLines: widget.expanded == true ? null : widget.maxLines,
+                            decoration: InputDecoration(
+                              hintText: widget.hintText,
+                              hintStyle: theme.typography.bodyMedium.copyWith(
+                                color: widget.hintColor ??
+                                    // ignore: deprecated_member_use
+                                    theme.colors.onSurface.withOpacity(0.5),
+                              ),
+                              border: widget.inputBorder,
+                              filled: widget.filled,
+                              fillColor: widget.inputFillColor ??
+                                  theme.colors.surfaceContainerHigh
+                                      // ignore: deprecated_member_use
+                                      .withOpacity(0.8),
+                              hoverColor: Colors.transparent,
+                            ),
+                            style: theme.typography.bodyMedium.copyWith(
+                              color: widget.textColor ?? theme.colors.onSurface,
+                            ),
+                            textInputAction: (Platform.isAndroid || Platform.isIOS) ? TextInputAction.send : TextInputAction.newline,
+                            onSubmitted: (_) => _handleSubmitted,
+                            keyboardType: TextInputType.multiline,
                           ),
-                          style: theme.typography.bodyMedium.copyWith(
-                            color: widget.textColor ?? theme.colors.onSurface,
-                          ),
-                          textInputAction: (Platform.isAndroid || Platform.isIOS) ? TextInputAction.send : TextInputAction.newline,
-                          onSubmitted: (_) => _handleSubmitted,
-                          keyboardType: TextInputType.multiline,
                         ),
-                      ),
-                      SizedBox(width: widget.gap),
-                      widget.sendIcon != null
-                          ? IconButton(
-                              icon: widget.sendIcon!,
-                              color: widget.sendIconColor ??
-                                  // ignore: deprecated_member_use
-                                  theme.colors.onSurface.withOpacity(0.5),
-                              onPressed: () => _handleSubmitted(_textController.text),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
+                        SizedBox(width: widget.gap),
+                        widget.sendIcon != null
+                            ? IconButton(
+                                icon: widget.sendIcon!,
+                                color: widget.sendIconColor ??
+                                    // ignore: deprecated_member_use
+                                    theme.colors.onSurface.withOpacity(0.5),
+                                onPressed: () => _handleSubmitted(_textController.text),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
