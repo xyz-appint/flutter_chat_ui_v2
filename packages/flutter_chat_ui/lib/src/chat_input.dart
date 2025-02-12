@@ -128,9 +128,7 @@ class _ChatInputState extends State<ChatInput> {
     final theme = context.watch<ChatTheme>();
     final onAttachmentTap = context.read<OnAttachmentTapCallback?>();
 
-    return GestureDetector(
-      onTap: () => _inputFocusNode.requestFocus(),
-      child: Positioned(
+    return Positioned(
         left: widget.left,
         right: widget.right,
         top: widget.top,
@@ -166,7 +164,9 @@ class _ChatInputState extends State<ChatInput> {
                             : const SizedBox.shrink(),
                         SizedBox(width: widget.gap),
                         Expanded(
-                          child: TextField(
+                          child: GestureDetector(
+      onTap: () => _inputFocusNode.requestFocus(),
+      child: TextField(
                             focusNode: _inputFocusNode,
                             controller: _textController,
                             expands: widget.expanded ?? false,
@@ -194,7 +194,7 @@ class _ChatInputState extends State<ChatInput> {
                             onSubmitted: (_) => _handleSubmitted,
                             keyboardType: TextInputType.multiline,
                           ),
-                        ),
+                        ),),
                         SizedBox(width: widget.gap),
                         widget.sendIcon != null
                             ? IconButton(
@@ -212,7 +212,6 @@ class _ChatInputState extends State<ChatInput> {
               ),
             ),
           ),
-        ),
       ),
     );
   }
