@@ -129,7 +129,7 @@ class _ChatInputState extends State<ChatInput> {
     final onAttachmentTap = context.read<OnAttachmentTapCallback?>();
 
     return GestureDetector(
-       onTap: () => _inputFocusNode.requestFocus(),
+      onTap: () => _inputFocusNode.requestFocus(),
       child: Positioned(
         left: widget.left,
         right: widget.right,
@@ -170,8 +170,8 @@ class _ChatInputState extends State<ChatInput> {
                             focusNode: _inputFocusNode,
                             controller: _textController,
                             expands: widget.expanded ?? false,
-                            minLines: widget.expanded == true ? 1 : null,
-                            maxLines: widget.expanded == true ? null : widget.maxLines,
+                            // minLines: widget.expanded == true ? 1 : null,
+                            // maxLines: widget.expanded == true ? null : widget.maxLines,
                             decoration: InputDecoration(
                               hintText: widget.hintText,
                               hintStyle: theme.typography.bodyMedium.copyWith(
